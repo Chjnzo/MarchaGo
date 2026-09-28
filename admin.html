@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MarchaGo — Admin ronde</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg:#FAF7F1; --surface:#FFFFFF; --surface-alt:#F3EEE1; --border:#E7DFCC;
+    --ink:#1B1C22; --ink-dim:#726C5E;
+    --coral:#FF5A4E; --teal:#0EA383; --gold:#F2A63C;
+    box-sizing:border-box;
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5}
+  a{color:var(--teal)}
+  :focus-visible{outline:2px solid var(--coral);outline-offset:2px;border-radius:6px}
+
+  .wrap{max-width:820px;margin:0 auto;padding:24px 20px 90px}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:22px}
+  .brandmark{font-family:'Unbounded';font-weight:800;font-size:14.5px}
+  .brandmark span{color:var(--coral)}
+  .lockchip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 12px;font-size:12px;color:var(--ink-dim);font-weight:600}
+  .lockchip svg{width:13px;height:13px;stroke-width:2.4}
+  .lockchip.unlocked{color:var(--teal)}
+
+  h1{font-family:'Unbounded';font-weight:700;font-size:clamp(24px,4.5vw,32px);line-height:1.15;margin:0 0 6px}
+  .lede{color:var(--ink-dim);font-size:14.5px;margin:0 0 24px;max-width:60ch}
+
+  /* GATE */
+  .gate{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px 28px;max-width:420px;margin:60px auto 0;text-align:center;box-shadow:0 8px 30px -18px rgba(27,28,34,.15)}
+  .gate-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--coral),#e14338);color:#fff;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .gate-icon svg{width:24px;height:24px;stroke-width:2.2}
+  .gate h2{font-family:'Unbounded';font-weight:600;font-size:19px;margin:0 0 8px}
+  .gate p{color:var(--ink-dim);font-size:13.5px;margin:0 0 20px}
+  .gate input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'Inter';font-size:15px;font-weight:600;text-align:center;letter-spacing:2px}
+  .gate button{margin-top:12px;width:100%;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:13px;font-family:'Inter';font-weight:700;font-size:14px;cursor:pointer}
+  .gate button:disabled{opacity:.6;cursor:wait}
+  .gate .err{color:#c73939;font-size:12.5px;margin-top:10px;min-height:16px}
+
+  /* CARDS */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:20px;box-shadow:0 1px 0 rgba(27,28,34,.02),0 8px 24px -16px rgba(27,28,34,.08)}
+  .card h2{font-family:'Unbounded';font-weight:600;font-size:16px;margin:0 0 4px;display:flex;align-items:center;gap:9px}
+  .card h2 svg{width:18px;height:18px;stroke-width:2.2;color:var(--coral)}
+  .card .sub{color:var(--ink-dim);font-size:12.8px;margin:0 0 18px}
+
+  label.field{display:block;margin-bottom:14px}
+  label.field .lab{display:block;font-size:12.5px;font-weight:600;color:var(--ink-dim);margin-bottom:5px}
+  input[type=text],input[type=number],textarea,select{
+    width:100%;background:var(--bg);border:1px solid var(--border);color:var(--ink);
+    border-radius:10px;padding:10px 12px;font-family:'Inter';font-size:14px;
+  }
+  textarea{min-height:60px;resize:vertical;line-height:1.5}
+  .row2{display:grid;grid-template-columns:120px 1fr;gap:12px}
+  @media (max-width:520px){.row2{grid-template-columns:1fr}}
+
+  /* QUESTIONS */
+  .q{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;position:relative}
+  .q-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .q-num{flex:none;width:24px;height:24px;border-radius:7px;background:var(--surface-alt);color:var(--ink-dim);display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700}
+  .q-type{margin-left:auto;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 8px;font-size:12px;color:var(--ink-dim)}
+  .q-remove{background:transparent;border:none;color:var(--ink-dim);cursor:pointer;padding:5px;border-radius:6px}
+  .q-remove:hover{background:#ffe8e5;color:#c73939}
+  .q-remove svg{width:15px;height:15px;stroke-width:2.2}
+  .q .opts{margin-top:8px}
+  .q .opts input{margin-bottom:5px}
+  .q .opts-hint{font-size:11.5px;color:var(--ink-dim);margin-bottom:5px}
+
+  .btn{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:11px 18px;font-family:'Inter';font-weight:700;font-size:13.5px;cursor:pointer}
+  .btn:disabled{opacity:.6;cursor:wait}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--border);font-weight:600}
+  .btn.coral{background:var(--coral)}
+  .btn.teal{background:var(--teal)}
+  .btn svg{width:15px;height:15px;stroke-width:2.4}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+
+  .status{font-size:12.8px;color:var(--teal);min-height:18px;margin-top:10px}
+  .status.err{color:#c73939}
+
+  /* PUBLISHED LIST */
+  .pub-item{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--border)}
+  .pub-item:first-child{border-top:none}
+  .pub-badge{flex:none;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--teal),#0b8a70);color:#fff;font-family:'Unbounded';font-weight:800;font-size:14px;display:inline-flex;align-items:center;justify-content:center}
+  .pub-body{flex:1;min-width:0}
+  .pub-title{font-weight:600;font-size:13.8px;margin:0}
+  .pub-meta{font-size:11.8px;color:var(--ink-dim);margin:2px 0 0}
+  .pub-del{background:transparent;border:1px solid var(--border);color:var(--ink-dim);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:5px}
+  .pub-del:hover{border-color:#c73939;color:#c73939}
+  .pub-del svg{width:12px;height:12px;stroke-width:2.4}
+  .pub-empty{color:var(--ink-dim);font-size:13px;padding:8px 0;font-style:italic}
+
+  /* GUÍA INTERNA */
+  .topic{margin-top:18px}
+  .topic:first-child{margin-top:0}
+  .topic h3{font-family:'Unbounded';font-size:14px;font-weight:600;margin:0 0 4px;color:var(--coral)}
+  .topic .sub{color:var(--ink-dim);font-size:12.2px;margin:0 0 10px}
+  ul.qs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+  ul.qs li{background:var(--bg);border:1px solid var(--border);border-radius:11px;padding:11px 12px;display:flex;gap:9px;align-items:flex-start;font-size:13.2px;line-height:1.4;cursor:pointer;transition:background .12s}
+  ul.qs li:hover{background:#fdfaf3}
+  ul.qs li input{margin-top:3px;accent-color:var(--teal);flex:none;cursor:pointer}
+  ul.qs li.done{background:#f4f2ec;border-color:#dcd4be}
+  ul.qs li.done span{color:var(--ink-dim);text-decoration:line-through}
+  .guide-hint{background:#f3eee1;border:1px solid #e2d9c0;border-radius:12px;padding:11px 13px;font-size:12.5px;color:#6b5f3e;margin-bottom:16px;display:flex;gap:9px;align-items:flex-start}
+  .guide-hint svg{width:16px;height:16px;stroke-width:2.2;color:#a06a12;flex:none;margin-top:1px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brandmark">Marcha Go <span>×</span> ULL · Admin</div>
+    <div class="lockchip" id="lockchip"><i data-lucide="lock"></i><span id="lockstate">bloqueado</span></div>
+  </header>
+
+  <!-- GATE -->
+  <div class="gate" id="gate">
+    <div class="gate-icon"><i data-lucide="shield-check"></i></div>
+    <h2>Acceso admin</h2>
+    <p>Introduce el código compartido con el equipo para gestionar las ronde.</p>
+    <input type="password" id="pass" placeholder="••••••••" autocomplete="off">
+    <button class="btn" id="unlock-btn" onclick="unlock()">Entrar</button>
+    <div class="err" id="gate-err"></div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" hidden>
+    <h1>Gestionar ronde</h1>
+    <p class="lede">Componi una nueva ronda con las preguntas que quieras, publícala y los trabajadores la verán al abrir el cuestionario. Cada respuesta llega al foglio Google.</p>
+
+    <!-- Published list -->
+    <div class="card">
+      <h2><i data-lucide="list"></i>Ronde ya publicadas</h2>
+      <p class="sub">Solo las ronde dinamiche (la Ronda 1 base è nel HTML).</p>
+      <div id="pub-list"><div class="pub-empty">Cargando…</div></div>
+    </div>
+
+    <!-- Guía interna (guion para el cara a cara) -->
+    <div class="card">
+      <h2><i data-lucide="clipboard-list"></i>Guía interna — cara a cara</h2>
+      <p class="sub">Preguntas de apoyo para cuando os veáis en persona. Marcad las que ya hayáis tratado — se guarda solo en este dispositivo.</p>
+      <div class="guide-hint"><i data-lucide="info"></i><div>No se sincroniza entre dispositivos: es una checklist local para el equipo, ideal para tenerla abierta durante la reunión.</div></div>
+
+      <div id="guide-topics">
+        <div class="topic">
+          <h3>Entorno general</h3>
+          <p class="sub">Para completar lo que respondan por escrito</p>
+          <ul class="qs">
+            <li><input type="checkbox"><span>¿Hay normativa que os cueste especialmente seguir o que cambie a menudo?</span></li>
+            <li><input type="checkbox"><span>¿Qué tendencias sociales o culturales notáis que cambian rápido en vuestro público?</span></li>
+          </ul>
+        </div>
+        <div class="topic">
+          <h3>Entorno específico</h3>
+          <p class="sub">Competencia, clientes, proveedores</p>
+          <ul class="qs">
+            <li><input type="checkbox"><span>¿Quiénes diríais que son vuestros principales competidores actuales en Canarias?</span></li>
+            <li><input type="checkbox"><span>¿Veis entrar competidores nuevos fácilmente? ¿Qué hace falta para montar algo parecido?</span></li>
+            <li><input type="checkbox"><span>¿Quién tiene más poder de negociación normalmente, vosotros o vuestros proveedores?</span></li>
+          </ul>
+        </div>
+        <div class="topic">
+          <h3>Cultura y estilo de dirección</h3>
+          <ul class="qs">
+            <li><input type="checkbox"><span>Siendo un equipo joven, ¿cómo tomáis las decisiones — muy jerárquico o más horizontal?</span></li>
+            <li><input type="checkbox"><span>¿Cómo os comunicáis internamente día a día?</span></li>
+          </ul>
+        </div>
+        <div class="topic">
+          <h3>Recursos y capacidades</h3>
+          <ul class="qs">
+            <li><input type="checkbox"><span>¿Qué hace a Marcha Go difícil de copiar por otra agencia?</span></li>
+            <li><input type="checkbox"><span>¿Cuál es vuestro activo más valioso: el equipo creativo, la red de contactos, la reputación de marca?</span></li>
+          </ul>
+        </div>
+        <div class="topic">
+          <h3>Estrategia</h3>
+          <ul class="qs">
+            <li><input type="checkbox"><span>¿Habéis crecido sobre todo con recursos propios, con alianzas, o de otra forma?</span></li>
+            <li><input type="checkbox"><span>¿Os habéis planteado dar el salto a otras islas o mercados?</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="btnrow" style="margin-top:14px">
+        <button class="btn ghost" onclick="resetGuide()"><i data-lucide="rotate-ccw"></i>Reiniciar checklist</button>
+      </div>
+    </div>
+
+    <!-- Builder -->
+    <div class="card">
+      <h2><i data-lucide="plus-circle"></i>Nueva ronda</h2>
+      <p class="sub">La numeración empieza da 2 (la 1 è quella base).</p>
+
+      <div class="row2">
+        <label class="field"><span class="lab">Número</span><input type="number" id="n-num" min="2" value="2"></label>
+        <label class="field"><span class="lab">Título</span><input type="text" id="n-title" placeholder="Segundo encuentro — Estrategia y competencia"></label>
+      </div>
+      <label class="field"><span class="lab">Subtítulo (opcional)</span><input type="text" id="n-subtitle" placeholder="Preguntas dopo la prima reunión"></label>
+
+      <h3 style="font-family:'Unbounded';font-weight:600;font-size:14px;margin:22px 0 10px">Preguntas</h3>
+      <div id="qlist"></div>
+      <div class="btnrow">
+        <button class="btn ghost" onclick="addQuestion()"><i data-lucide="plus"></i>Añadir pregunta</button>
+      </div>
+
+      <div class="btnrow" style="margin-top:22px">
+        <button class="btn coral" id="publish-btn" onclick="publish()"><i data-lucide="send"></i>Publicar ronda</button>
+        <button class="btn ghost" onclick="resetForm()"><i data-lucide="rotate-ccw"></i>Vaciar formulario</button>
+      </div>
+      <div class="status" id="status"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ⚠️ Sostituisci con la URL "/exec" del tuo deploy Apps Script (stessa del cuestionario). */
+const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzAEQIcAjHFAnPG5fXU1xRN4MlrTYpJ6-vhonQ9mZblxQW9O-I8Tp5ykvR8yHDn3oSC/exec';
+
+const PASS_KEY = 'mg-admin-pass';
+let passcode = sessionStorage.getItem(PASS_KEY) || '';
+
+async function post(payload){
+  const res = await fetch(WEBHOOK_URL, { method:'POST', body: JSON.stringify(payload) });
+  return res.json();
+}
+async function get(){
+  const res = await fetch(WEBHOOK_URL, { method:'GET' });
+  return res.json();
+}
+
+/* ================= GATE ================= */
+async function unlock(){
+  const btn = document.getElementById('unlock-btn');
+  const err = document.getElementById('gate-err');
+  const val = document.getElementById('pass').value.trim();
+  if(!val){ err.textContent = 'Introduce el código.'; return; }
+  btn.disabled = true; btn.textContent = 'Comprobando…'; err.textContent = '';
+  try{
+    const r = await post({ action:'check-pass', passcode: val });
+    if(r.ok){
+      passcode = val;
+      sessionStorage.setItem(PASS_KEY, val);
+      showApp();
+    } else {
+      err.textContent = 'Código incorrecto.';
+    }
+  } catch(_){
+    err.textContent = 'Sin conexión al endpoint. Comprueba WEBHOOK_URL.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Entrar';
+  }
+}
+document.getElementById('pass').addEventListener('keydown', function(e){ if(e.key==='Enter') unlock(); });
+
+function showApp(){
+  document.getElementById('gate').hidden = true;
+  document.getElementById('app').hidden = false;
+  document.getElementById('lockchip').classList.add('unlocked');
+  document.getElementById('lockchip').querySelector('svg').setAttribute('data-lucide','unlock');
+  document.getElementById('lockstate').textContent = 'desbloqueado';
+  if(!document.getElementById('qlist').children.length) addQuestion();
+  loadPublished();
+  initGuide();
+  refreshIcons();
+}
+
+/* ================= GUÍA INTERNA (checklist locale) ================= */
+function initGuide(){
+  document.querySelectorAll('#guide-topics .qs input[type=checkbox]').forEach(function(cb, i){
+    const key = 'mg-interview-' + i;
+    if(localStorage.getItem(key) === '1'){ cb.checked = true; cb.closest('li').classList.add('done'); }
+    cb.onchange = function(){
+      localStorage.setItem(key, cb.checked ? '1' : '0');
+      cb.closest('li').classList.toggle('done', cb.checked);
+    };
+    // Click sull'intera riga tranne che sull'input stesso (che ha già il suo handler)
+    cb.closest('li').addEventListener('click', function(e){
+      if(e.target === cb) return;
+      cb.checked = !cb.checked; cb.dispatchEvent(new Event('change'));
+    });
+  });
+}
+function resetGuide(){
+  if(!confirm('¿Desmarcar todas las preguntas de la guía?')) return;
+  document.querySelectorAll('#guide-topics .qs input[type=checkbox]').forEach(function(cb, i){
+    localStorage.removeItem('mg-interview-' + i);
+    cb.checked = false; cb.closest('li').classList.remove('done');
+  });
+}
+
+/* Auto-unlock se sessione già valida */
+(async function(){
+  if(passcode){
+    try{ const r = await post({ action:'check-pass', passcode }); if(r.ok) showApp(); }catch(_){}
+  }
+})();
+
+/* ================= QUESTION BUILDER ================= */
+let qCounter = 0;
+function addQuestion(prefill){
+  qCounter++;
+  const idx = qCounter;
+  const q = document.createElement('div');
+  q.className = 'q';
+  q.dataset.idx = idx;
+  q.innerHTML = `
+    <div class="q-head">
+      <span class="q-num">${idx}</span>
+      <select class="q-type" onchange="onTypeChange(this)">
+        <option value="textarea">Testo lungo</option>
+        <option value="text">Testo breve</option>
+        <option value="radio">Opción única (pills)</option>
+        <option value="select">Menú desplegable</option>
+      </select>
+      <button type="button" class="q-remove" onclick="removeQuestion(this)" title="Eliminar"><i data-lucide="trash-2"></i></button>
+    </div>
+    <label class="field"><span class="lab">Etiqueta / pregunta</span><input type="text" class="q-label" placeholder="Ej. ¿Qué obstáculo mayor encontráis para crecer?"></label>
+    <div class="opts" hidden>
+      <div class="opts-hint">Una opción por línea.</div>
+      <textarea class="q-opts" placeholder="Sí&#10;No&#10;No lo sé"></textarea>
+    </div>
+  `;
+  document.getElementById('qlist').appendChild(q);
+  if(prefill){
+    q.querySelector('.q-type').value = prefill.type || 'textarea';
+    onTypeChange(q.querySelector('.q-type'));
+    q.querySelector('.q-label').value = prefill.label || '';
+    if(prefill.options) q.querySelector('.q-opts').value = prefill.options.join('\n');
+  }
+  refreshIcons();
+}
+function removeQuestion(btn){
+  btn.closest('.q').remove();
+  renumber();
+}
+function renumber(){
+  Array.from(document.querySelectorAll('#qlist .q')).forEach(function(q, i){
+    q.querySelector('.q-num').textContent = i+1;
+  });
+}
+function onTypeChange(sel){
+  const q = sel.closest('.q');
+  const needs = (sel.value === 'radio' || sel.value === 'select');
+  q.querySelector('.opts').hidden = !needs;
+}
+
+/* ================= PUBLISH ================= */
+function slug(s){
+  return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,20) || 'q';
+}
+
+async function publish(){
+  const st = document.getElementById('status');
+  const btn = document.getElementById('publish-btn');
+  st.className = 'status'; st.textContent = '';
+  const num = Number(document.getElementById('n-num').value);
+  const title = document.getElementById('n-title').value.trim();
+  const subtitle = document.getElementById('n-subtitle').value.trim();
+  if(!num || num < 2){ setErr('Número inválido (mínimo 2).'); return; }
+  if(!title){ setErr('Falta el título.'); return; }
+  const qs = [];
+  const cards = document.querySelectorAll('#qlist .q');
+  for(let i=0; i<cards.length; i++){
+    const c = cards[i];
+    const label = c.querySelector('.q-label').value.trim();
+    const type = c.querySelector('.q-type').value;
+    if(!label){ setErr('La pregunta ' + (i+1) + ' no tiene etiqueta.'); return; }
+    const q = { id: 'q-r'+num+'-'+(i+1)+'-'+slug(label), label, type };
+    if(type === 'radio' || type === 'select'){
+      const opts = c.querySelector('.q-opts').value.split('\n').map(s=>s.trim()).filter(Boolean);
+      if(!opts.length){ setErr('La pregunta ' + (i+1) + ' necesita opciones.'); return; }
+      q.options = opts;
+    }
+    qs.push(q);
+  }
+  btn.disabled = true; btn.innerHTML = '<i data-lucide="loader"></i>Publicando…'; refreshIcons();
+  try{
+    const r = await post({ action:'publish', passcode, ronda: { number:num, title, subtitle, questions:qs } });
+    if(r.ok){
+      st.textContent = '¡Publicada! Los trabajadores la verán al recargar el cuestionario.';
+      resetForm();
+      loadPublished();
+    } else {
+      setErr(r.error === 'passcode' ? 'Sesión expirada — recarga.' : ('Error: ' + (r.error || 'desconocido')));
+    }
+  } catch(_){
+    setErr('Sin conexión.');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i data-lucide="send"></i>Publicar ronda'; refreshIcons();
+  }
+}
+
+function setErr(msg){ const s = document.getElementById('status'); s.className='status err'; s.textContent = msg; }
+
+function resetForm(){
+  document.getElementById('n-title').value = '';
+  document.getElementById('n-subtitle').value = '';
+  document.getElementById('qlist').innerHTML = '';
+  qCounter = 0;
+  addQuestion();
+  // Suggerisci prossimo numero disponibile
+  const items = document.querySelectorAll('#pub-list .pub-item');
+  const maxNum = Math.max(1, ...Array.from(items).map(x => Number(x.dataset.num||1)));
+  document.getElementById('n-num').value = maxNum + 1;
+}
+
+/* ================= PUBLISHED LIST ================= */
+async function loadPublished(){
+  const list = document.getElementById('pub-list');
+  list.innerHTML = '<div class="pub-empty">Cargando…</div>';
+  try{
+    const r = await get();
+    if(!r.ok){ list.innerHTML = '<div class="pub-empty">Error al cargar.</div>'; return; }
+    const rondas = r.rondas || [];
+    if(!rondas.length){ list.innerHTML = '<div class="pub-empty">Ninguna ronda dinamica publicada aún.</div>'; return; }
+    rondas.sort((a,b)=> (a.number||0) - (b.number||0));
+    list.innerHTML = rondas.map(rd => `
+      <div class="pub-item" data-num="${rd.number}">
+        <div class="pub-badge">${rd.number}</div>
+        <div class="pub-body">
+          <p class="pub-title">${esc(rd.title)}</p>
+          <p class="pub-meta">${rd.questions.length} preguntas · publicada ${fmtDate(rd.publishedAt)}</p>
+        </div>
+        <button class="pub-del" onclick="deleteRonda('${rd.id}', ${rd.number})"><i data-lucide="trash-2"></i>Eliminar</button>
+      </div>
+    `).join('');
+    refreshIcons();
+    // Bump default number
+    const maxN = Math.max(1, ...rondas.map(x=>x.number||1));
+    document.getElementById('n-num').value = maxN + 1;
+  } catch(_){
+    list.innerHTML = '<div class="pub-empty">Sin conexión.</div>';
+  }
+}
+
+async function deleteRonda(id, num){
+  if(!confirm('¿Eliminar la ronda ' + num + '? Las respuestas ya enviadas se mantienen en el foglio, pero la ronda no se mostrará más.')) return;
+  try{
+    const r = await post({ action:'delete-ronda', passcode, id });
+    if(r.ok) loadPublished();
+    else alert('Error: ' + (r.error || 'desconocido'));
+  } catch(_){ alert('Sin conexión.'); }
+}
+
+function esc(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtDate(iso){
+  if(!iso) return '';
+  const d = new Date(iso); if(isNaN(d)) return '';
+  return d.toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit', year:'numeric'});
+}
+
+function refreshIcons(){ if(window.lucide) lucide.createIcons(); }
+refreshIcons();
+</script>
+</body>
+</html>
