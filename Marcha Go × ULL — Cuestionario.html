@@ -1,0 +1,416 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marcha Go × ULL — Cuestionario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7F1; --surface:#FFFFFF; --surface-alt:#F3EEE1; --border:#E7DFCC;
+    --ink:#1B1C22; --ink-dim:#726C5E;
+    --coral:#FF5A4E; --teal:#0EA383; --gold:#F2A63C;
+    --radius:16px;
+    box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html{scroll-padding-top:60px}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--teal)}
+  :focus-visible{outline:2px solid var(--coral);outline-offset:2px;border-radius:6px}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px 90px}
+
+  .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(250,247,241,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .topbar-inner{max-width:760px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .brandmark{font-family:'Unbounded';font-weight:800;font-size:14.5px}
+  .brandmark span{color:var(--coral)}
+  .switcher{display:flex;gap:5px;background:var(--surface-alt);border:1px solid var(--border);border-radius:999px;padding:4px}
+  .switcher button{border:none;background:transparent;color:var(--ink-dim);font-family:'Inter';font-weight:600;font-size:12.5px;padding:7px 13px;border-radius:999px;cursor:pointer}
+  .switcher button.active{background:var(--ink);color:var(--surface)}
+
+  .progresswrap{max-width:760px;margin:0 auto;padding:10px 20px 0}
+  .progressbar{height:6px;background:var(--surface-alt);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+  .progressbar > div{height:100%;background:linear-gradient(90deg,var(--coral),var(--gold));width:0%;transition:width .2s}
+  .progresstext{font-size:12px;color:var(--ink-dim);margin-top:6px}
+
+  .hero{padding:32px 0 24px}
+  .eyebrow{color:var(--teal);font-weight:600;font-size:13.5px;margin:0 0 10px}
+  h1{font-family:'Unbounded';font-weight:800;font-size:clamp(26px,5.6vw,36px);line-height:1.1;margin:0 0 14px;max-width:17ch}
+  .lede{font-size:15.5px;color:var(--ink-dim);max-width:60ch;margin:0}
+  .lede b{color:var(--ink);font-weight:600}
+
+  section.stage{margin-top:28px}
+  .stage-head{display:flex;align-items:baseline;gap:11px;margin-bottom:14px}
+  .stage-num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:var(--coral);color:#fff;font-family:'Unbounded';font-size:13px;flex:none}
+  .stage-head h2{font-family:'Unbounded';font-weight:600;font-size:19px;margin:0}
+  .stage-head .stage-sub{font-size:13px;color:var(--ink-dim);margin:2px 0 0}
+
+  .group{margin-bottom:22px}
+  .group-title{font-family:'Unbounded';font-weight:600;font-size:13.5px;color:var(--coral);margin:0 0 12px;padding-left:2px}
+
+  .qcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 17px;margin-bottom:10px}
+  .qcard label.qlabel{display:block;font-size:14.5px;font-weight:500;margin-bottom:9px;line-height:1.4}
+  .qhint{display:block;font-size:12px;color:var(--ink-dim);font-weight:400;margin-top:2px}
+
+  input[type=text],input[type=number],textarea,select{
+    width:100%;background:var(--bg);border:1px solid var(--border);color:var(--ink);
+    border-radius:10px;padding:10px 11px;font-family:'Inter';font-size:14.5px;
+  }
+  textarea{min-height:64px;resize:vertical;line-height:1.5}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  @media (max-width:560px){.row2{grid-template-columns:1fr}}
+
+  .quickgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:560px){.quickgrid{grid-template-columns:1fr}}
+  .qcard.quick{padding:13px 15px}
+  .qcard.quick label.qlabel{font-size:13px;color:var(--ink-dim);margin-bottom:7px;font-weight:500}
+
+  .pillgroup{display:flex;flex-wrap:wrap;gap:7px}
+  .pill{border:1px solid var(--border);background:var(--bg);color:var(--ink-dim);padding:8px 13px;border-radius:999px;font-size:13px;cursor:pointer;position:relative}
+  .pill input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+  .pill.checked{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+
+  /* recap card */
+  .recap{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-bottom:10px}
+  .recap-title{display:flex;align-items:center;gap:9px;font-family:'Unbounded';font-weight:600;font-size:14.5px;margin-bottom:4px}
+  .recap-note{font-size:12.8px;color:var(--ink-dim);margin:0 0 14px}
+  .recap-rows{display:flex;flex-direction:column;gap:9px}
+  .recap-row{display:flex;gap:10px;font-size:13.6px;padding:8px 0;border-top:1px solid var(--border)}
+  .recap-row:first-child{border-top:none;padding-top:0}
+  .recap-k{flex:0 0 128px;color:var(--ink-dim);font-weight:500}
+  .recap-v{flex:1}
+  .recap-tag{display:inline-block;background:var(--surface-alt);border:1px solid var(--border);border-radius:999px;padding:2px 9px;font-size:11px;color:var(--ink-dim);margin-left:6px}
+
+  .submit-block{margin-top:34px;padding:24px 20px;border-radius:var(--radius);background:var(--surface-alt);border:1px solid var(--border);text-align:center}
+  .submit-block p{color:var(--ink-dim);margin:0 0 16px;font-size:14px}
+  .btnrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  button.cta{font-family:'Inter';font-weight:700;font-size:14px;border-radius:999px;border:none;padding:12px 20px;cursor:pointer}
+  button.cta.primary{background:var(--coral);color:#fff}
+  button.cta.secondary{background:transparent;color:var(--ink);border:1px solid var(--border)}
+  .status{font-size:12.5px;margin-top:12px;color:var(--teal);min-height:16px}
+
+  footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--border);color:var(--ink-dim);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  .topic{margin-top:24px}
+  .topic h3{font-family:'Unbounded';font-size:15px;font-weight:600;margin:0 0 4px;color:var(--coral)}
+  .topic .sub{color:var(--ink-dim);font-size:12.5px;margin:0 0 11px}
+  ul.qs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+  ul.qs li{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 13px;display:flex;gap:10px;align-items:flex-start;font-size:13.6px}
+  ul.qs li input{margin-top:3px;accent-color:var(--teal);flex:none}
+  ul.qs li.done span{color:var(--ink-dim);text-decoration:line-through}
+
+  .view{display:none}
+  .view.active{display:block}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brandmark">Marcha Go <span>×</span> ULL</div>
+    <div class="switcher">
+      <button id="btn-form" class="active" onclick="showView('form')">Cuestionario</button>
+      <button id="btn-guide" onclick="showView('guide')">Guía interna</button>
+    </div>
+  </div>
+  <div class="progresswrap" id="progresswrap">
+    <div class="progressbar"><div id="progressfill"></div></div>
+    <div class="progresstext" id="progresstext">0 de 0 preguntas respondidas</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===== VIEW 1: QUESTIONNAIRE ===== -->
+  <div id="view-form" class="view active">
+    <div class="hero">
+      <p class="eyebrow">Dirección Estratégica · ULL · Grado en ADE</p>
+      <h1>Ayudadnos a conocer Marcha Go 🚀</h1>
+      <p class="lede">Somos Giada, Marco, Sophi, Cynthia y Ana — estamos analizando <b>Marcha Go</b> para un trabajo de universidad. Antes de las preguntas os dejamos un resumen de lo que ya sabemos por vuestra web, para no haceros repetir cosas que ya contáis ahí. Podéis ir guardando y volviendo cuando queráis: el formulario recuerda lo que escribáis en este dispositivo.</p>
+    </div>
+
+    <section class="stage">
+      <div class="group">
+        <div class="recap">
+          <div class="recap-title">✅ Lo que ya sabemos de vosotros</div>
+          <p class="recap-note">Lo hemos sacado de vuestra web y redes — si algo no es correcto o ha cambiado, decídnoslo en el campo de abajo.</p>
+          <div class="recap-rows">
+            <div class="recap-row"><span class="recap-k">Sede</span><span class="recap-v">Calle Doctor Pasteur Nº32, San Cristóbal de La Laguna, Tenerife</span></div>
+            <div class="recap-row"><span class="recap-k">Contacto</span><span class="recap-v">+34 822 024 204 · info@marchago.com</span></div>
+            <div class="recap-row"><span class="recap-k">Redes</span><span class="recap-v">Instagram, LinkedIn, Facebook, TikTok y X como @marchagooficial</span></div>
+            <div class="recap-row"><span class="recap-k">Lema</span><span class="recap-v">"Unimos Canarias a través de experiencias significativas"</span></div>
+            <div class="recap-row"><span class="recap-k">Tres pilares</span><span class="recap-v">Energía y diversión · Creatividad sin límites · Conexión y Cultura</span></div>
+            <div class="recap-row"><span class="recap-k">Equipo (según web)</span><span class="recap-v">Estefanía Lima (Comunicación), Vanessa Manrique, Joaquín da Silva y Ricardo Camacho (Diseño Gráfico), Leo Fernandez (Edición)</span></div>
+            <div class="recap-row"><span class="recap-k">Año</span><span class="recap-v">El pie de la web pone "© 2020"<span class="recap-tag">sin confirmar</span></span></div>
+          </div>
+        </div>
+        <div class="qcard">
+          <label class="qlabel" for="q-correcciones">¿Algo de lo anterior está desactualizado o es incorrecto?</label>
+          <textarea id="q-correcciones" placeholder="Opcional — solo si hay algo que corregir"></textarea>
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Datos que no encontramos online</p>
+        <div class="quickgrid">
+          <div class="qcard quick"><label class="qlabel">Nombre y puesto de quien responde</label><input type="text" id="q-resp" placeholder="p. ej. Estefanía, Comunicación"></div>
+          <div class="qcard quick"><label class="qlabel">Fecha de fundación</label><input type="text" id="q-founded" placeholder="mes / año"></div>
+          <div class="qcard quick"><label class="qlabel">¿Empresa familiar?</label>
+            <div class="pillgroup"><label class="pill"><input type="radio" name="family" value="Sí">Sí</label><label class="pill"><input type="radio" name="family" value="No">No</label></div>
+          </div>
+          <div class="qcard quick"><label class="qlabel">Forma jurídica</label>
+            <div class="pillgroup">
+              <label class="pill"><input type="radio" name="legal" value="Autónomo">Autónomo</label>
+              <label class="pill"><input type="radio" name="legal" value="SL">SL</label>
+              <label class="pill"><input type="radio" name="legal" value="SA">SA</label>
+              <label class="pill"><input type="radio" name="legal" value="Cooperativa">Cooperativa</label>
+              <label class="pill"><input type="radio" name="legal" value="Otra">Otra</label>
+            </div>
+          </div>
+          <div class="qcard quick"><label class="qlabel">Empleados (completo / parcial)</label>
+            <div class="row2"><input type="number" min="0" id="q-fulltime" placeholder="Completo"><input type="number" min="0" id="q-parttime" placeholder="Parcial"></div>
+          </div>
+          <div class="qcard quick"><label class="qlabel">Facturación aproximada 2024</label>
+            <select id="q-billing">
+              <option value="">Sin especificar</option>
+              <option>Menos de 300.000 €</option><option>301.000 – 600.000 €</option>
+              <option>601.000 – 1.800.000 €</option><option>Más de 1.800.000 €</option>
+            </select>
+          </div>
+          <div class="qcard quick"><label class="qlabel">Código CNAE <span class="qhint">si lo sabéis</span></label><input type="text" id="q-cnae" placeholder="p. ej. 8230" maxlength="6"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Contadnos más de vuestra historia</p>
+        <div class="qcard"><label class="qlabel" for="q-origen">¿Cómo nació la idea concreta de Marcha Go? ¿Quién la fundó y qué buscabais al principio que no encontrabais en otras agencias de eventos?</label><textarea id="q-origen"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-ejemplos">Vuestra web habla de eventos "excéntricos e irreverentes" — ¿nos dais uno o dos ejemplos reales de eventos que reflejen bien eso?</label><textarea id="q-ejemplos"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-publico">¿A quién van dirigidos exactamente vuestros eventos? ¿Cómo es el público que asiste (edad, intereses)?</label><textarea id="q-publico"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-necesidad">¿Qué necesidad cubrís que otras agencias de eventos en Canarias no cubren igual?</label><textarea id="q-necesidad"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-proceso">¿Cómo es el proceso, desde que surge la idea de un evento hasta el día en que se celebra?</label><textarea id="q-proceso"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-evolucion">¿Cómo ha cambiado la empresa desde que empezasteis hasta hoy (tamaño del equipo, tipo de eventos, alcance)?</label><textarea id="q-evolucion"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-alcance">Más allá de Tenerife, ¿en qué otras islas o zonas trabajáis realmente hoy?</label><textarea id="q-alcance"></textarea></div>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Más allá del lema</p>
+        <div class="qcard"><label class="qlabel" for="q-mision">Decís que "unís Canarias a través de experiencias significativas" — ¿qué significa eso en el día a día, más allá de la frase?</label><textarea id="q-mision"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-vision">¿Dónde os gustaría ver Marcha Go dentro de 5 años?</label><textarea id="q-vision"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-objetivos">¿Qué objetivos concretos tenéis ahora mismo (número de eventos, facturación, nuevos mercados, equipo)?</label><textarea id="q-objetivos"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-valores">Además de energía, creatividad y conexión, ¿hay algún valor interno, de puertas para adentro, que no se vea tanto desde fuera?</label><textarea id="q-valores"></textarea></div>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Vuestro entorno</p>
+        <div class="qcard"><label class="qlabel" for="q-geo">Trabajando desde Canarias, ¿qué os supone la insularidad y la lejanía (traer material, artistas, proveedores)? ¿Y el clima?</label><textarea id="q-geo"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-eco">¿Cómo notáis la situación económica de vuestro público (renta disponible, ganas de gastar en ocio) y cosas como el desempleo o la inflación en vuestros costes?</label><textarea id="q-eco"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-legal">¿Qué permisos o normativa necesitáis para montar un evento, y con qué frecuencia cambian? ¿Os ha afectado alguna vez a un evento concreto?</label><textarea id="q-legal"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-social">¿Cómo cambia lo que busca la gente joven en ocio y eventos, y con qué rapidez? ¿Cuánto pesa la sostenibilidad en vuestras decisiones?</label><textarea id="q-social"></textarea></div>
+        <div class="qcard"><label class="qlabel" for="q-cierre">De todo esto, ¿qué dos o tres cosas del entorno creéis que más afectan a los resultados de Marcha Go, para bien o para mal?</label><textarea id="q-cierre"></textarea></div>
+      </div>
+    </section>
+
+    <div class="submit-block">
+      <p>Cuando queráis mandarnos lo que llevéis escrito —no hace falta terminarlo todo de una vez— usad uno de estos botones.</p>
+      <div class="btnrow">
+        <button class="cta primary" onclick="sendEmail()">✉️ Enviar por email</button>
+        <button class="cta secondary" onclick="copySummary()">📋 Copiar respuestas</button>
+      </div>
+      <div class="status" id="status"></div>
+    </div>
+
+    <footer>
+      <span>Grado en ADE · Dirección Estratégica · Universidad de La Laguna</span>
+      <span>¡Gracias por vuestro tiempo! 🌴</span>
+    </footer>
+  </div>
+
+  <!-- ===== VIEW 2: INTERNAL GUIDE ===== -->
+  <div id="view-guide" class="view">
+    <div class="hero" style="padding-top:32px">
+      <p class="eyebrow">Uso interno del equipo</p>
+      <h1 style="max-width:20ch">Guion para cuando nos veamos en persona</h1>
+      <p class="lede">Preguntas de apoyo para la conversación cara a cara — sirven para profundizar en lo que ya nos cuenten por escrito. Marcad las que ya hayáis tratado, se guarda solo en este dispositivo.</p>
+    </div>
+
+    <div class="topic">
+      <h3>Entorno general</h3>
+      <p class="sub">Para completar lo que respondan por escrito</p>
+      <ul class="qs">
+        <li><input type="checkbox"><span>¿Hay normativa que os cueste especialmente seguir o que cambie a menudo?</span></li>
+        <li><input type="checkbox"><span>¿Qué tendencias sociales o culturales notáis que cambian rápido en vuestro público?</span></li>
+      </ul>
+    </div>
+
+    <div class="topic">
+      <h3>Entorno específico</h3>
+      <p class="sub">Competencia, clientes, proveedores</p>
+      <ul class="qs">
+        <li><input type="checkbox"><span>¿Quiénes diríais que son vuestros principales competidores actuales en Canarias?</span></li>
+        <li><input type="checkbox"><span>¿Veis entrar competidores nuevos fácilmente? ¿Qué hace falta para montar algo parecido?</span></li>
+        <li><input type="checkbox"><span>¿Quién tiene más poder de negociación normalmente, vosotros o vuestros proveedores?</span></li>
+      </ul>
+    </div>
+
+    <div class="topic">
+      <h3>Cultura y estilo de dirección</h3>
+      <ul class="qs">
+        <li><input type="checkbox"><span>Siendo un equipo joven, ¿cómo tomáis las decisiones — muy jerárquico o más horizontal?</span></li>
+        <li><input type="checkbox"><span>¿Cómo os comunicáis internamente día a día?</span></li>
+      </ul>
+    </div>
+
+    <div class="topic">
+      <h3>Recursos y capacidades</h3>
+      <ul class="qs">
+        <li><input type="checkbox"><span>¿Qué hace a Marcha Go difícil de copiar por otra agencia?</span></li>
+        <li><input type="checkbox"><span>¿Cuál es vuestro activo más valioso: el equipo creativo, la red de contactos, la reputación de marca?</span></li>
+      </ul>
+    </div>
+
+    <div class="topic">
+      <h3>Estrategia</h3>
+      <ul class="qs">
+        <li><input type="checkbox"><span>¿Habéis crecido sobre todo con recursos propios, con alianzas, o de otra forma?</span></li>
+        <li><input type="checkbox"><span>¿Os habéis planteado dar el salto a otras islas o mercados?</span></li>
+      </ul>
+    </div>
+
+    <footer style="margin-top:32px"><span>Guion interno — no compartir fuera del equipo</span><span></span></footer>
+  </div>
+
+</div>
+
+<script>
+/* ===================== FIELD LIST ===================== */
+const RADIO_GROUPS = ['family','legal'];
+const TEXT_IDS = [
+  'q-correcciones','q-resp','q-founded','q-fulltime','q-parttime','q-billing','q-cnae',
+  'q-origen','q-ejemplos','q-publico','q-necesidad','q-proceso','q-evolucion','q-alcance',
+  'q-mision','q-vision','q-objetivos','q-valores',
+  'q-geo','q-eco','q-legal','q-social','q-cierre'
+];
+/* q-correcciones is optional, excluded from progress count */
+const PROGRESS_IDS = TEXT_IDS.filter(id => id !== 'q-correcciones');
+
+/* ===================== PERSISTENCE ===================== */
+const STORAGE_KEY = 'mg-cuestionario-v3';
+function loadAnswers(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }catch(e){ return {}; } }
+function saveAnswers(a){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(a)); }catch(e){} }
+let answers = loadAnswers();
+
+function restoreAll(){
+  TEXT_IDS.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el && answers[id] != null) el.value = answers[id];
+  });
+  RADIO_GROUPS.forEach(name=>{
+    if(answers[name] != null){
+      const el = document.querySelector('input[name="'+name+'"][value="'+CSS.escape(answers[name])+'"]');
+      if(el){ el.checked = true; el.closest('.pill')?.classList.add('checked'); }
+    }
+  });
+}
+
+document.getElementById('view-form').addEventListener('change', function(e){
+  const t = e.target;
+  if(t.type === 'radio'){
+    answers[t.name] = t.value;
+    document.getElementsByName(t.name).forEach(r=>r.closest('.pill')?.classList.toggle('checked', r.checked));
+  } else if(t.id){
+    answers[t.id] = t.value;
+  }
+  saveAnswers(answers);
+  updateProgress();
+});
+
+/* ===================== PROGRESS ===================== */
+function updateProgress(){
+  const total = PROGRESS_IDS.length + RADIO_GROUPS.length;
+  let done = 0;
+  PROGRESS_IDS.forEach(id=>{ if((answers[id]||'').toString().trim() !== '') done++; });
+  RADIO_GROUPS.forEach(name=>{ if(answers[name]) done++; });
+  document.getElementById('progressfill').style.width = (done/total*100)+'%';
+  document.getElementById('progresstext').textContent = done + ' de ' + total + ' preguntas respondidas';
+}
+
+restoreAll();
+updateProgress();
+
+/* ===================== VIEW SWITCH ===================== */
+function showView(v){
+  document.getElementById('view-form').classList.toggle('active', v==='form');
+  document.getElementById('view-guide').classList.toggle('active', v==='guide');
+  document.getElementById('btn-form').classList.toggle('active', v==='form');
+  document.getElementById('btn-guide').classList.toggle('active', v==='guide');
+  document.getElementById('progresswrap').style.display = v==='form' ? 'block' : 'none';
+}
+
+/* interview checklist (internal guide only) */
+try{
+  document.querySelectorAll('#view-guide .qs input[type=checkbox]').forEach(function(cb, i){
+    const key = 'mg-interview-' + i;
+    if(localStorage.getItem(key) === '1'){ cb.checked = true; cb.closest('li').classList.add('done'); }
+    cb.addEventListener('change', function(){
+      localStorage.setItem(key, cb.checked ? '1' : '0');
+      cb.closest('li').classList.toggle('done', cb.checked);
+    });
+  });
+}catch(e){}
+
+/* ===================== SUMMARY / EXPORT ===================== */
+const LABELS = {
+  'q-correcciones':'Correcciones a lo que ya sabíamos',
+  'q-resp':'Nombre y puesto', 'q-founded':'Fecha de fundación',
+  'q-fulltime':'Empleados tiempo completo', 'q-parttime':'Empleados tiempo parcial',
+  'q-billing':'Facturación 2024', 'q-cnae':'CNAE',
+  'q-origen':'Origen de la idea', 'q-ejemplos':'Ejemplos de eventos',
+  'q-publico':'Público y clientes', 'q-necesidad':'Necesidad que cubren',
+  'q-proceso':'Proceso de trabajo', 'q-evolucion':'Evolución de la empresa', 'q-alcance':'Alcance geográfico',
+  'q-mision':'Qué significa el lema en el día a día', 'q-vision':'Visión a 5 años',
+  'q-objetivos':'Objetivos actuales', 'q-valores':'Valores internos',
+  'q-geo':'Entorno geográfico', 'q-eco':'Entorno económico', 'q-legal':'Entorno político-legal',
+  'q-social':'Entorno sociocultural', 'q-cierre':'Factores que más afectan'
+};
+
+function buildSummary(){
+  const lines = ['Respuestas — cuestionario Marcha Go', ''];
+  lines.push('Empresa familiar: ' + (answers['family'] || '—'));
+  lines.push('Forma jurídica: ' + (answers['legal'] || '—'));
+  lines.push('');
+  TEXT_IDS.forEach(id=>{
+    lines.push(LABELS[id] + ': ' + (answers[id] && answers[id].toString().trim() !== '' ? answers[id] : '—'));
+  });
+  return lines.join('\n');
+}
+
+function copySummary(){
+  const text = buildSummary();
+  navigator.clipboard.writeText(text).then(function(){
+    setStatus('Copiado — ya podéis pegarlo donde queráis.');
+  }).catch(function(){
+    setStatus('No se pudo copiar automáticamente, seleccionad y copiad el texto manualmente.');
+  });
+}
+
+function sendEmail(){
+  const text = buildSummary();
+  navigator.clipboard.writeText(text).catch(function(){});
+  const subject = encodeURIComponent('Marcha Go — respuestas cuestionario ADE');
+  const body = encodeURIComponent('Hemos copiado todas las respuestas en el portapapeles — pegadlas aquí antes de enviar (Ctrl/Cmd+V):\n\n');
+  window.location.href = 'mailto:marcoferrari.wk@gmail.com?subject=' + subject + '&body=' + body;
+  setStatus('Respuestas copiadas y correo abierto — pegad con Ctrl/Cmd+V en el cuerpo del mensaje.');
+}
+
+function setStatus(msg){ const s = document.getElementById('status'); s.textContent = msg; setTimeout(()=>{ s.textContent=''; }, 5000); }
+</script>
+</body>
+</html>
+
+</body></html>
